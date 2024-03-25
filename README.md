@@ -11,4 +11,5 @@
 ## What I did
 - UI streaming
 - Server actions
+- Continuous playing with recommended tracks
 - 

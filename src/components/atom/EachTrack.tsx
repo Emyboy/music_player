@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function EachTrack({ track }: Props) {
-    const { activeTrack, isPlaying, playTrack } = useAudioPlayer();
+    const { activeTrack, isPlaying, playTrack, addToQueue } = useAudioPlayer();
 
     return (
         <div className="relative group">
@@ -60,7 +60,7 @@ export default function EachTrack({ track }: Props) {
                 </div>
                 <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100">
                     <DefaultTooltip label="Add to queue">
-                        <EachActionBtn Icon={MdAdd} />
+                        <EachActionBtn Icon={MdAdd} onClick={() => addToQueue(track)} />
                     </DefaultTooltip>
                     <DefaultTooltip label="Add to favorite">
                         <EachActionBtn Icon={MdFavoriteBorder} />

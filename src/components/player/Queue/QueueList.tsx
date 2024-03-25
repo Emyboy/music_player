@@ -1,10 +1,11 @@
+'use client'
 import EachActionBtn from '@/components/atom/EachActionBtn'
 import { useAudioPlayer } from '@/context/AudioPlayerContext'
 import { TrackData } from '@/types/track.types'
 import { formatDuration } from '@/utils/index.utils'
 import Image from 'next/image'
 import React from 'react'
-import { MdClose } from 'react-icons/md'
+import { MdClose, MdOutlinePlayCircleFilled, MdPause } from 'react-icons/md'
 
 type Props = {}
 
@@ -27,9 +28,21 @@ export default function QueueList({ }: Props) {
 }
 
 const EachQueueTrack = ({ track }: { track: TrackData }) => {
+    const { isPlaying, activeTrack } = useAudioPlayer();
+    const isCurrentlyPlaying = isPlaying && track.id === activeTrack?.id;
+
     return <>
         <div className="flex items-center gap-3 group py-3">
-            <div className="min-h-16 min-w-16 overflow-hidden rounded-xl relative">
+            <div className="min-h-16 min-w-16 overflow-hidden rounded-xl relative flex justify-center items-center">
+                {
+                    isCurrentlyPlaying ?
+                        <div className="absolute z-20">
+                            <EachActionBtn Icon={MdPause} onClick={() => { }} />
+                        </div> :
+                        <div className="absolute z-20 opacity-0 group-hover:opacity-100">
+                            <EachActionBtn Icon={MdOutlinePlayCircleFilled} onClick={() => { }} />
+                        </div>
+                }
                 <Image src={track.album.cover_small} alt={track.title} fill />
             </div>
             <div className="flex flex-col flex-1 max-w-[90%] truncate">

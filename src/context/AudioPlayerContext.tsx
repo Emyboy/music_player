@@ -10,6 +10,7 @@ interface AudioPlayerContextType {
     nextTrack: () => void;
     previousTrack: () => void;
     playTrack: (track: TrackData) => void;
+    addToQueue: (track: TrackData) => void;
 }
 
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(
@@ -34,7 +35,8 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
         setAudioContext: (context: Partial<AudioPlayerContextType>) => context,
         nextTrack: () => { },
         previousTrack: () => { },
-        playTrack: (track: TrackData) => track
+        playTrack: (track: TrackData) => track,
+        addToQueue: (track: TrackData) => track
     });
 
     const setAudioContext = (newState: Partial<AudioPlayerContextType>) => {
@@ -44,6 +46,7 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
         }));
     };
 
+    // plays a single track
     const playTrack = (track: TrackData) => {
         let alreadyExist = state.queue.find(t => t.id === track.id)
         if (alreadyExist && state.isPlaying) {
@@ -60,6 +63,12 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
         }));
     };
 
+    const play = (track: TrackData) => {
+        setState((prev: any) => {
+            return { ...prev, activeTrack: track, playTrack: true }
+        })
+    }
+
     const nextTrack = () => {
         const { queue, activeTrack } = state;
         if (!activeTrack || queue.length === 0) return;
@@ -71,7 +80,7 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
 
         const nextIndex = currentIndex + 1;
         const nextTrack = queue[nextIndex];
-        playTrack(nextTrack);
+        play(nextTrack);
     };
 
     const previousTrack = () => {
@@ -85,14 +94,32 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
 
         const previousIndex = currentIndex - 1;
         const previousTrack = queue[previousIndex];
-        playTrack(previousTrack);
+        play(previousTrack);
+    };
+
+    const addToQueue = (track: TrackData) => {
+        const { queue } = state;
+        const existingIndex = queue.findIndex((t) => t.id === track.id);
+        if (existingIndex !== -1) {
+            const updatedQueue = [...queue];
+            updatedQueue.splice(existingIndex, 1);
+            setState((prevState) => ({
+                ...prevState,
+                queue: updatedQueue,
+            }));
+        } else {
+            setState((prevState) => ({
+                ...prevState,
+                queue: [...queue, track],
+            }));
+        }
     };
 
     // console.log('PLAYER UPDATE:::', state)
 
     return (
         <AudioPlayerContext.Provider
-            value={{ ...state, setAudioContext, nextTrack, previousTrack, playTrack }}
+            value={{ ...state, setAudioContext, nextTrack, previousTrack, playTrack, addToQueue }}
         >
             {children}
         </AudioPlayerContext.Provider>
