@@ -1,6 +1,8 @@
 
-export function formatDuration(durationInSeconds: number): string {
-    const minutes = Math.floor(durationInSeconds / 60);
-    const seconds = durationInSeconds % 60;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+export function formatDuration(duration: number): string {
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+    return `${formattedMinutes}:${formattedSeconds}`;
 }

@@ -1,37 +1,38 @@
 'use client'
-import { TrackData } from '@/types/track.types';
-import React, { createContext, useState, useContext } from 'react';
-
-interface Track {
-    id: string;
-    title: string;
-    artist: string;
-    duration: number;
-}
+import React, { createContext, useState, useContext } from "react";
+import { TrackData } from "@/types/track.types";
 
 interface AudioPlayerContextType {
     queue: TrackData[];
     activeTrack: TrackData | null;
     isPlaying: boolean;
     setAudioContext: (newState: Partial<AudioPlayerContextType>) => void;
+    nextTrack: () => void;
+    previousTrack: () => void;
 }
 
-const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined);
+const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(
+    undefined,
+);
 
 export const useAudioPlayer = () => {
     const context = useContext(AudioPlayerContext);
     if (!context) {
-        throw new Error('useAudioPlayer must be used within an AudioPlayerProvider');
+        throw new Error(
+            "useAudioPlayer must be used within an AudioPlayerProvider",
+        );
     }
     return context;
 };
 
-export const AudioPlayerProvider = ({ children }:any) => {
+export const AudioPlayerProvider: React.FC = ({ children }: any) => {
     const [state, setState] = useState<AudioPlayerContextType>({
         queue: [],
         activeTrack: null,
         isPlaying: false,
-        setAudioContext: (context: Partial<AudioPlayerContextType>) => context
+        setAudioContext: (context: Partial<AudioPlayerContextType>) => context,
+        nextTrack: () => {},
+        previousTrack: () => {},
     });
 
     const setAudioContext = (newState: Partial<AudioPlayerContextType>) => {
@@ -41,8 +42,46 @@ export const AudioPlayerProvider = ({ children }:any) => {
         }));
     };
 
+    const playTrack = (track: TrackData) => {
+        setState((prevState) => ({
+            ...prevState,
+            activeTrack: track,
+            isPlaying: true,
+        }));
+    };
+
+    const nextTrack = () => {
+        const { queue, activeTrack } = state;
+        if (!activeTrack || queue.length === 0) return;
+
+        const currentIndex = queue.findIndex(
+            (track) => track.id === activeTrack.id,
+        );
+        if (currentIndex === -1 || currentIndex === queue.length - 1) return;
+
+        const nextIndex = currentIndex + 1;
+        const nextTrack = queue[nextIndex];
+        playTrack(nextTrack);
+    };
+
+    const previousTrack = () => {
+        const { queue, activeTrack } = state;
+        if (!activeTrack || queue.length === 0) return;
+
+        const currentIndex = queue.findIndex(
+            (track) => track.id === activeTrack.id,
+        );
+        if (currentIndex === -1 || currentIndex === 0) return;
+
+        const previousIndex = currentIndex - 1;
+        const previousTrack = queue[previousIndex];
+        playTrack(previousTrack);
+    };
+
     return (
-        <AudioPlayerContext.Provider value={{ ...state, setAudioContext }}>
+        <AudioPlayerContext.Provider
+            value={{ ...state, setAudioContext, nextTrack, previousTrack }}
+        >
             {children}
         </AudioPlayerContext.Provider>
     );

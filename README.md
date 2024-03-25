@@ -9,5 +9,6 @@
 
 
 ## What I did
-- hook for data fetching
+- UI streaming
+- Server actions
 - 
