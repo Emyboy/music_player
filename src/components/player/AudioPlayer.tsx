@@ -16,29 +16,24 @@ import { formatDuration } from "@/utils/index.utils";
 type Props = {};
 
 export default function AudioPlayer({ }: Props) {
-    const { activeTrack, nextTrack, previousTrack } = useAudioPlayer();
+    const { activeTrack, nextTrack, previousTrack, isPlaying, setAudioContext } = useAudioPlayer();
     const audioRef = useRef<HTMLAudioElement>(null);
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [currentTime, setCurrentTime] = useState<number>(0);
     const [totalDuration, setTotalDuration] = useState<number>(0);
 
     useEffect(() => {
         if (activeTrack) {
-            audioRef.current?.play();
+            if (isPlaying) {
+                audioRef.current?.play();
+            } else {
+                audioRef.current?.pause();
+            }
         }
-    }, [activeTrack]);
+    }, [isPlaying]); // Listen to changes in isPlaying to play or pause the audio
 
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
-
-        const handlePlay = () => {
-            setIsPlaying(true);
-        };
-
-        const handlePause = () => {
-            setIsPlaying(false);
-        };
 
         const handleTimeUpdate = () => {
             setCurrentTime(audio.currentTime);
@@ -48,24 +43,23 @@ export default function AudioPlayer({ }: Props) {
             setTotalDuration(audio.duration);
         };
 
-        audio.addEventListener("play", handlePlay);
-        audio.addEventListener("pause", handlePause);
         audio.addEventListener("timeupdate", handleTimeUpdate);
         audio.addEventListener("loadedmetadata", handleLoadedMetadata);
 
         return () => {
-            audio.removeEventListener("play", handlePlay);
-            audio.removeEventListener("pause", handlePause);
             audio.removeEventListener("timeupdate", handleTimeUpdate);
             audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
         };
     }, []);
 
     const handlePlayPause = () => {
-        if (audioRef.current?.paused) {
-            audioRef.current?.play();
-        } else {
-            audioRef.current?.pause();
+        setAudioContext({ isPlaying: !isPlaying });
+    };
+
+    const handleSliderChange = (newValue: number[]) => {
+        if (audioRef.current) {
+            audioRef.current.currentTime = newValue[0];
+            setCurrentTime(newValue[0]);
         }
     };
 
@@ -81,15 +75,9 @@ export default function AudioPlayer({ }: Props) {
                         <DefaultTooltip label="Previous">
                             <EachActionBtn Icon={MdSkipPrevious} onClick={previousTrack} />
                         </DefaultTooltip>
-                        {isPlaying ? (
-                            <DefaultTooltip label="Pause">
-                                <EachActionBtn Icon={MdOutlinePause} onClick={handlePlayPause} />
-                            </DefaultTooltip>
-                        ) : (
-                            <DefaultTooltip label="Play">
-                                <EachActionBtn Icon={MdPlayCircle} onClick={handlePlayPause} />
-                            </DefaultTooltip>
-                        )}
+                        <DefaultTooltip label={isPlaying ? "Pause" : "Play"}>
+                            <EachActionBtn Icon={isPlaying ? MdOutlinePause : MdPlayCircle} onClick={handlePlayPause} />
+                        </DefaultTooltip>
                         <DefaultTooltip label="Next">
                             <EachActionBtn Icon={MdSkipNext} onClick={nextTrack} />
                         </DefaultTooltip>
@@ -101,7 +89,7 @@ export default function AudioPlayer({ }: Props) {
                 <div className="flex w-full gap-3 items-center text-white">
                     <small id="progressive-track-duration">{formatDuration(currentTime)}</small>
                     <div className="flex-1">
-                        <Slider value={[currentTime]} max={totalDuration} step={1} />
+                        <Slider value={[currentTime]} max={totalDuration} step={1} onValueChange={handleSliderChange} />
                     </div>
                     <small id="total-track-duration">{formatDuration(totalDuration)}</small>
                 </div>

@@ -6,6 +6,7 @@ import {
     MdAdd,
     MdFavoriteBorder,
     MdOutlinePlayCircleFilled,
+    MdPause,
 } from "react-icons/md";
 import DefaultTooltip from "./DefaultTooltip";
 import { TrackData } from "@/types/track.types";
@@ -17,7 +18,7 @@ type Props = {
 };
 
 export default function EachTrack({ track }: Props) {
-    const { setAudioContext } = useAudioPlayer();
+    const { activeTrack, isPlaying, playTrack } = useAudioPlayer();
 
     return (
         <div className="relative group">
@@ -25,14 +26,27 @@ export default function EachTrack({ track }: Props) {
                 <div className="flex max-w-[75%] gap-3">
                     <div className="min-h-[67px] min-w-[65px] relative overflow-hidden rounded-lg flex items-center justify-center">
                         <Image src={track.album.cover} alt={track.title} fill />
-                        <div className="opacity-0 group-hover:opacity-100">
-                            <EachActionBtn
-                                Icon={MdOutlinePlayCircleFilled}
-                                onClick={() =>
-                                    setAudioContext({ activeTrack: track })
-                                }
-                            />
-                        </div>
+                        <>
+                            {activeTrack?.id === track.id && isPlaying ?
+                                <div>
+                                    <EachActionBtn
+                                        Icon={MdPause}
+                                        onClick={() =>
+                                            playTrack(track)
+                                        }
+                                    />
+                                </div>
+                                :
+                                <div className="opacity-0 group-hover:opacity-100">
+                                    <EachActionBtn
+                                        Icon={MdOutlinePlayCircleFilled}
+                                        onClick={() =>
+                                            playTrack(track)
+                                        }
+                                    />
+                                </div>
+                            }
+                        </>
                     </div>
                     <div className="flex flex-col truncate">
                         <h3 className="truncate">{track.title}</h3>

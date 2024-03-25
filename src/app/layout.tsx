@@ -19,6 +19,7 @@ export default function RootLayout({
     return (
         <html lang="en" className="select-none bg-black">
             <body className={inter.className}>
+                {/* @ts-ignore */}
                 <AudioPlayerProvider>
                     <TheApp>{children}</TheApp>
                 </AudioPlayerProvider>
