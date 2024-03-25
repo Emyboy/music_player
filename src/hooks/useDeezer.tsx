@@ -12,7 +12,7 @@ interface DeezerTrackSearchResponse {
     data: any[];
 }
 
-export const deezerURL = 'https://api.deezer.com/';
+export const deezerURL = 'https://api.deezer.com';
 
 export const useDeezerChart = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -50,7 +50,7 @@ export const useDeezerTrackSearch = () => {
         setIsLoading(true);
         try {
             const response = await axios.get<DeezerTrackSearchResponse>(
-                `${deezerURL}search?q=${query}`
+                `/${deezerURL}search?q=${query}`
             );
             setData(response.data);
             setIsError(false);
