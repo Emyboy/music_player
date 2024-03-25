@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useRef, useState } from "react";
 import { Slider } from "../ui/slider";
 import EachActionBtn from "../atom/EachActionBtn";
@@ -12,6 +13,8 @@ import {
 import DefaultTooltip from "../atom/DefaultTooltip";
 import { useAudioPlayer } from "@/context/AudioPlayerContext";
 import { formatDuration } from "@/utils/index.utils";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import QueueList from "./Queue/QueueList";
 
 type Props = {};
 
@@ -83,9 +86,16 @@ export default function AudioPlayer({ }: Props) {
                             <EachActionBtn Icon={MdSkipNext} onClick={nextTrack} />
                         </DefaultTooltip>
                     </div>
-                    <DefaultTooltip label="Queue">
-                        <EachActionBtn Icon={MdOutlinePlaylistAdd} />
-                    </DefaultTooltip>
+                    <Popover>
+                        <PopoverTrigger>
+                            <DefaultTooltip label="Queue">
+                                <EachActionBtn Icon={MdOutlinePlaylistAdd} />
+                            </DefaultTooltip>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <QueueList />
+                        </PopoverContent>
+                    </Popover>
                 </div>
                 <div className="flex w-full gap-3 items-center text-white">
                     <small id="progressive-track-duration">{formatDuration(currentTime)}</small>

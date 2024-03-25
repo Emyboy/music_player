@@ -1,12 +1,14 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import { bg_img } from "./page";
 import { useAudioPlayer } from "@/context/AudioPlayerContext";
 
 type Props = {
     children: any;
 };
+
+export const bg_img =
+    "https://e-cdns-images.dzcdn.net/images/artist/3590cb6cac25b0b1ea6918eec878145e/250x250-000000-80-0-0.jpg";
 
 export default function TheApp({ children }: Props) {
     const { activeTrack } = useAudioPlayer();
