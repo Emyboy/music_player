@@ -15,7 +15,7 @@ type Props = {};
 
 export default function AudioPlayer({ }: Props) {
     return (
-        <div className="min-h-24 w-full bg-gray-300 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 flex flex-col items-center gap-5 p-3 justify-between shadow-lg">
+        <div className="min-h-24 w-full bg-gray-500 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-30 flex flex-col items-center gap-5 p-3 justify-between shadow-lg">
             <div className="flex gap-2 justify-between w-full">
                 <DefaultTooltip label="Shuffle">
                     <EachActionBtn Icon={MdOutlineShuffle} />

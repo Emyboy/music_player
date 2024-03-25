@@ -6,12 +6,15 @@ import { MdAdd, MdFavoriteBorder, MdOutlinePlayCircleFilled } from "react-icons/
 import DefaultTooltip from "./DefaultTooltip";
 import { TrackData } from "@/types/track.types";
 import { formatDuration } from "@/utils/index.utils";
+import { useAudioPlayer } from "@/context/AudioPlayerContext";
 
 type Props = {
     track: TrackData;
 };
 
 export default function EachTrack({ track }: Props) {
+    const { setAudioContext } = useAudioPlayer();
+
     return (
         <div className="relative group">
             <div className="p-3 flex gap-3 absolute z-30 w-full justify-between">
@@ -23,7 +26,7 @@ export default function EachTrack({ track }: Props) {
                             fill
                         />
                         <div className="opacity-0 group-hover:opacity-100">
-                            <EachActionBtn Icon={MdOutlinePlayCircleFilled} />
+                            <EachActionBtn Icon={MdOutlinePlayCircleFilled} onClick={() => setAudioContext({ activeTrack: track })} />
                         </div>
                     </div>
                     <div className="flex flex-col truncate">

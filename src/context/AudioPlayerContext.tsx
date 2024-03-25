@@ -26,7 +26,7 @@ export const useAudioPlayer = () => {
     return context;
 };
 
-export const AudioPlayerProvider: React.FC = ({ children }:any) => {
+export const AudioPlayerProvider = ({ children }:any) => {
     const [state, setState] = useState<AudioPlayerContextType>({
         queue: [],
         activeTrack: null,
