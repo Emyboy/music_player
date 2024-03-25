@@ -70,6 +70,7 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
     }
 
     const nextTrack = () => {
+        console.log('NEXT RACK CALLED')
         const { queue, activeTrack } = state;
         if (!activeTrack || queue.length === 0) return;
 

@@ -46,14 +46,20 @@ export default function AudioPlayer({ }: Props) {
             setTotalDuration(audio.duration);
         };
 
+        const handleEnded = () => {
+            nextTrack();
+        };
+
         audio.addEventListener("timeupdate", handleTimeUpdate);
         audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+        audio.addEventListener("ended", handleEnded);
 
         return () => {
             audio.removeEventListener("timeupdate", handleTimeUpdate);
             audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+            audio.removeEventListener("ended", handleEnded);
         };
-    }, []);
+    }, [nextTrack]);
 
 
     const handlePlayPause = () => {
