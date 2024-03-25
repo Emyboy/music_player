@@ -1,22 +1,20 @@
-'use client'
 import EachTrack from '@/components/atom/EachTrack';
-import { deezerURL, useDeezerChart } from '@/hooks/useDeezer';
+import { TrackData } from '@/types/track.types';
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import React from 'react'
 
 type Props = {}
 
-export default function ChartList({ }: Props) {
+export default async function ChartList({ }: Props) {
 
-    const { isLoading: chartLoading, data: chartData, isError: chartError, error: chartErrorMsg, refetch: refetchChart } = useDeezerChart();
+    const res = await axios('https://api.deezer.com/chart');
 
-    console.log({ isLoading: chartLoading, data: chartData, isError: chartError, error: chartErrorMsg, refetch: refetchChart })
-    
+    // console.log(res.data.tracks)
 
     return (
         <>
-            {new Array(11).fill(null).map((_) => {
-                return <EachTrack key={crypto.randomUUID()} />;
+            {res.data.tracks.data.map((track: TrackData) => {
+                return <EachTrack key={`track-${track.id}`} track={track} />;
             })}
         </>
     )

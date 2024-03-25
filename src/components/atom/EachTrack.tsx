@@ -3,18 +3,22 @@ import React from "react";
 import EachActionBtn from "./EachActionBtn";
 import { MdAdd, MdFavoriteBorder, MdOutlinePlayCircleFilled } from "react-icons/md";
 import DefaultTooltip from "./DefaultTooltip";
+import { TrackData } from "@/types/track.types";
+import { formatDuration } from "@/utils/index.utils";
 
-type Props = {};
+type Props = {
+    track: TrackData;
+};
 
-export default function EachTrack({ }: Props) {
+export default function EachTrack({ track }: Props) {
     return (
         <div className="relative group">
             <div className="p-3 flex gap-3 absolute z-30 w-full justify-between">
                 <div className="flex max-w-[75%] gap-3">
                     <div className="min-h-[67px] min-w-[65px] relative overflow-hidden rounded-lg flex items-center justify-center">
                         <Image
-                            src="https://e-cdns-images.dzcdn.net/images/artist/23de8e5598fae2d1abb45b885a1924ce/1000x1000-000000-80-0-0.jpg"
-                            alt="album art"
+                            src={track.album.cover}
+                            alt={track.title}
                             fill
                         />
                         <div className="opacity-0 group-hover:opacity-100">
@@ -22,12 +26,11 @@ export default function EachTrack({ }: Props) {
                         </div>
                     </div>
                     <div className="flex flex-col truncate">
-                        <h3 className="truncate">The track name</h3>
-                        <h5 className="text-sm opacity-60 truncate">
-                            Another thing about the track Another thing about
-                            the track
+                        <h3 className="truncate">{track.title}</h3>
+                        <h5 className="text-sm opacity-60 truncate mb-1">
+                            by {track.artist.name}
                         </h5>
-                        <small className="opacity-50">03:45</small>
+                        <small className="opacity-50">{formatDuration(track.duration)}</small>
                     </div>
                 </div>
                 <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100">
