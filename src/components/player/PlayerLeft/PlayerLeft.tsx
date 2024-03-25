@@ -1,7 +1,8 @@
 import DefaultTooltip from "@/components/atom/DefaultTooltip";
-import React from "react";
+import React, { Suspense } from "react";
 import { MdFavoriteBorder, MdOutlinePerson3 } from "react-icons/md";
 import ChartList from "./ChartList";
+import TracksLoading from "@/components/atom/TacksLoading";
 
 type Props = {};
 
@@ -28,8 +29,10 @@ export default function PlayerLeft({ }: Props) {
                     </DefaultTooltip>
                 </div>
                 <div className="max-h-[100%-2.5rem] overflow-y-auto">
-                    <ChartList />
-                    
+                    <Suspense fallback={<TracksLoading />}>
+                        <ChartList />
+                    </Suspense>
+
                 </div>
             </div>
         </div>

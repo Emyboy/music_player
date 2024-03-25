@@ -1,4 +1,4 @@
-import { PlayCircle, PlayIcon } from "lucide-react";
+'use client'
 
 interface Props {
     Icon: any;

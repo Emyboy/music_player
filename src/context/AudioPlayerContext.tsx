@@ -1,3 +1,5 @@
+'use client'
+import { TrackData } from '@/types/track.types';
 import React, { createContext, useState, useContext } from 'react';
 
 interface Track {
@@ -8,8 +10,8 @@ interface Track {
 }
 
 interface AudioPlayerContextType {
-    queue: Track[];
-    activeTrack: number;
+    queue: TrackData[];
+    activeTrack: TrackData | null;
     isPlaying: boolean;
     setAudioContext: (newState: Partial<AudioPlayerContextType>) => void;
 }
@@ -27,7 +29,7 @@ export const useAudioPlayer = () => {
 export const AudioPlayerProvider: React.FC = ({ children }:any) => {
     const [state, setState] = useState<AudioPlayerContextType>({
         queue: [],
-        activeTrack: -1,
+        activeTrack: null,
         isPlaying: false,
         setAudioContext: (context: Partial<AudioPlayerContextType>) => context
     });

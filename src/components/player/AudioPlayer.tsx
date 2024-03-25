@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import { Slider } from "../ui/slider";
 import EachActionBtn from "../atom/EachActionBtn";
