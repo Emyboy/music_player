@@ -9,8 +9,7 @@ interface AudioPlayerContextType {
     setAudioContext: (newState: Partial<AudioPlayerContextType>) => void;
     nextTrack: () => void;
     previousTrack: () => void;
-    playTrack: (track: TrackData) => void,
-
+    playTrack: (track: TrackData) => void;
 }
 
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(
@@ -46,7 +45,7 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
     };
 
     const playTrack = (track: TrackData) => {
-        let alreadyExist = state.queue.filter(t => t.id === track.id)
+        let alreadyExist = state.queue.find(t => t.id === track.id)
         if (alreadyExist && state.isPlaying) {
             return setState((prevState) => ({
                 ...prevState,

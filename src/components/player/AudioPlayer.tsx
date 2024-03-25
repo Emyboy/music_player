@@ -16,7 +16,7 @@ import { formatDuration } from "@/utils/index.utils";
 type Props = {};
 
 export default function AudioPlayer({ }: Props) {
-    const { activeTrack, nextTrack, previousTrack, isPlaying, setAudioContext } = useAudioPlayer();
+    const { activeTrack, nextTrack, previousTrack, isPlaying, setAudioContext, queue } = useAudioPlayer();
     const audioRef = useRef<HTMLAudioElement>(null);
     const [currentTime, setCurrentTime] = useState<number>(0);
     const [totalDuration, setTotalDuration] = useState<number>(0);
@@ -29,7 +29,7 @@ export default function AudioPlayer({ }: Props) {
                 audioRef.current?.pause();
             }
         }
-    }, [isPlaying]); // Listen to changes in isPlaying to play or pause the audio
+    }, [isPlaying, activeTrack]);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -51,6 +51,7 @@ export default function AudioPlayer({ }: Props) {
             audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
         };
     }, []);
+
 
     const handlePlayPause = () => {
         setAudioContext({ isPlaying: !isPlaying });
