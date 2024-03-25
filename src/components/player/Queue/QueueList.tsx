@@ -1,7 +1,10 @@
+import EachActionBtn from '@/components/atom/EachActionBtn'
 import { useAudioPlayer } from '@/context/AudioPlayerContext'
 import { TrackData } from '@/types/track.types'
+import { formatDuration } from '@/utils/index.utils'
 import Image from 'next/image'
 import React from 'react'
+import { MdClose } from 'react-icons/md'
 
 type Props = {}
 
@@ -25,9 +28,17 @@ export default function QueueList({ }: Props) {
 
 const EachQueueTrack = ({ track }: { track: TrackData }) => {
     return <>
-        <div className="flex items-center">
-            <div className="h-20 w-20 overflow-hidden rounded-xl">
+        <div className="flex items-center gap-3 group py-3">
+            <div className="min-h-16 min-w-16 overflow-hidden rounded-xl relative">
                 <Image src={track.album.cover_small} alt={track.title} fill />
+            </div>
+            <div className="flex flex-col flex-1 max-w-[90%] truncate">
+                <h1 className='truncate'>{track.title}</h1>
+                <h1 className='font-light text-sm truncate'>{track.artist.name}</h1>
+                <small className='font-light text-sm'>{formatDuration(track.duration)}</small>
+            </div>
+            <div className='opacity-0 group-hover:opacity-100'>
+                <EachActionBtn Icon={MdClose} onClick={() => { }} />
             </div>
         </div>
     </>
