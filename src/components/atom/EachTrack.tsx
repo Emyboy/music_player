@@ -5,6 +5,7 @@ import EachActionBtn from "./EachActionBtn";
 import {
     MdAdd,
     MdFavoriteBorder,
+    MdHorizontalRule,
     MdOutlinePlayCircleFilled,
     MdPause,
 } from "react-icons/md";
@@ -18,7 +19,7 @@ type Props = {
 };
 
 export default function EachTrack({ track }: Props) {
-    const { activeTrack, isPlaying, playTrack, addToQueue } = useAudioPlayer();
+    const { activeTrack, isPlaying, playTrack, addToQueue, queue } = useAudioPlayer();
 
     return (
         <div className="relative group">
@@ -59,9 +60,15 @@ export default function EachTrack({ track }: Props) {
                     </div>
                 </div>
                 <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100">
-                    <DefaultTooltip label="Add to queue">
-                        <EachActionBtn Icon={MdAdd} onClick={() => addToQueue(track)} />
-                    </DefaultTooltip>
+                    {
+                        queue.find(item => item.id === track.id) ?
+                            <DefaultTooltip label="Remove from queue">
+                                <EachActionBtn Icon={MdHorizontalRule} onClick={() => addToQueue(track)} />
+                            </DefaultTooltip> :
+                            <DefaultTooltip label="Add to queue">
+                                <EachActionBtn Icon={MdAdd} onClick={() => addToQueue(track)} />
+                            </DefaultTooltip>
+                    }
                     <DefaultTooltip label="Add to favorite">
                         <EachActionBtn Icon={MdFavoriteBorder} />
                     </DefaultTooltip>

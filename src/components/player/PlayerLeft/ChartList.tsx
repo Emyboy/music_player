@@ -8,6 +8,8 @@ type Props = {
     query: string | null;
 };
 
+export const dynamic = 'force-dynamic'
+
 export default async function ChartList({ query }: Props) {
     const res = await axios(
         `https://api.deezer.com/${query ? `search?q=${query}` : "chart"}`,

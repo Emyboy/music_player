@@ -2,6 +2,7 @@ import React from "react";
 import PlayerRight from "@/components/player/PlayerRight";
 import PlayerLeft from "@/components/player/PlayerLeft/PlayerLeft";
 
+export const dynamic = 'force-dynamic';
 
 export default function page(props: any) {
     return (

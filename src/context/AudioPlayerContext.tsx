@@ -11,6 +11,7 @@ interface AudioPlayerContextType {
     previousTrack: () => void;
     playTrack: (track: TrackData) => void;
     addToQueue: (track: TrackData) => void;
+    play: (track: TrackData) => void;
 }
 
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(
@@ -36,7 +37,8 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
         nextTrack: () => { },
         previousTrack: () => { },
         playTrack: (track: TrackData) => track,
-        addToQueue: (track: TrackData) => track
+        addToQueue: (track: TrackData) => track,
+        play: (track: TrackData) => track,
     });
 
     const setAudioContext = (newState: Partial<AudioPlayerContextType>) => {
@@ -65,7 +67,10 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
 
     const play = (track: TrackData) => {
         setState((prev: any) => {
-            return { ...prev, activeTrack: track, playTrack: true }
+            return { 
+                ...prev, 
+                activeTrack: track, 
+                isPlaying: true }
         })
     }
 
@@ -120,7 +125,7 @@ export const AudioPlayerProvider: React.FC = ({ children }: any) => {
 
     return (
         <AudioPlayerContext.Provider
-            value={{ ...state, setAudioContext, nextTrack, previousTrack, playTrack, addToQueue }}
+            value={{ ...state, setAudioContext, nextTrack, previousTrack, playTrack, addToQueue, play }}
         >
             {children}
         </AudioPlayerContext.Provider>

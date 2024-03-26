@@ -28,7 +28,7 @@ export default function QueueList({ }: Props) {
 }
 
 const EachQueueTrack = ({ track }: { track: TrackData }) => {
-    const { isPlaying, activeTrack } = useAudioPlayer();
+    const { isPlaying, activeTrack, addToQueue, play, setAudioContext } = useAudioPlayer();
     const isCurrentlyPlaying = isPlaying && track.id === activeTrack?.id;
 
     return <>
@@ -37,21 +37,21 @@ const EachQueueTrack = ({ track }: { track: TrackData }) => {
                 {
                     isCurrentlyPlaying ?
                         <div className="absolute z-20">
-                            <EachActionBtn Icon={MdPause} onClick={() => { }} />
+                            <EachActionBtn Icon={MdPause} onClick={() => setAudioContext({ isPlaying: false })} />
                         </div> :
                         <div className="absolute z-20 opacity-0 group-hover:opacity-100">
-                            <EachActionBtn Icon={MdOutlinePlayCircleFilled} onClick={() => { }} />
+                            <EachActionBtn Icon={MdOutlinePlayCircleFilled} onClick={() => play(track)} />
                         </div>
                 }
                 <Image src={track.album.cover_small} alt={track.title} fill />
             </div>
             <div className="flex flex-col flex-1 max-w-[90%] truncate">
                 <h1 className='truncate'>{track.title}</h1>
-                <h1 className='font-light text-sm truncate'>{track.artist.name}</h1>
-                <small className='font-light text-sm'>{formatDuration(track.duration)}</small>
+                <h1 className='font-light text-xs truncate'>{track.artist.name}</h1>
+                <small className='font-light text-xs'>{formatDuration(track.duration)}</small>
             </div>
             <div className='opacity-0 group-hover:opacity-100'>
-                <EachActionBtn Icon={MdClose} onClick={() => { }} />
+                <EachActionBtn Icon={MdClose} onClick={() => addToQueue(track)} />
             </div>
         </div>
     </>
